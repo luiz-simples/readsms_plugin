@@ -6,14 +6,16 @@ export 'model/sms.dart';
 
 class Readsms {
   static const _channel = EventChannel("readsms");
-  final StreamController _controller = StreamController<SMS>();
+  static StreamController _controller;
   Stream<SMS> get smsStream => _controller.stream as Stream<SMS>;
 
   static StreamSubscription _channelStreamSubscription;
 
   read() {
+    if (_controller != null) _controller.close();
     if (_channelStreamSubscription != null) _channelStreamSubscription.cancel();
 
+    _controller = StreamController<SMS>();
     _channelStreamSubscription = _channel.receiveBroadcastStream().listen((e) {
       if (!_controller.isClosed) _controller.sink.add(SMS.fromList(e));
     });
@@ -22,5 +24,7 @@ class Readsms {
   void dispose() {
     _controller?.close();
     _channelStreamSubscription?.cancel();
+    _controller = null;
+    _channelStreamSubscription = null;
   }
 }
