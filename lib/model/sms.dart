@@ -8,7 +8,7 @@ class SMS {
   /// The time when sms is received
   final DateTime timeReceived;
 
-  SMS({required this.body, required this.sender, required this.timeReceived});
+  SMS({this.body, this.sender, this.timeReceived});
 
   /// creates an SMS instance from the list of objects
   /// received from the broadcast stream of event channel
